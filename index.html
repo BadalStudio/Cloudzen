@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <title>Cloudzen — Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: #f4f7ff;
+    }
+
+    header {
+      padding: 22px;
+      border-bottom: 1px solid #252c40;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand span { color: #80e0c0; }
+
+    .status {
+      color: #80e0c0;
+      font-size: 12px;
+      border: 1px solid #28594e;
+      border-radius: 20px;
+      padding: 7px 10px;
+    }
+
+    main {
+      width: min(100% - 32px, 900px);
+      margin: 36px auto;
+    }
+
+    .eyebrow {
+      color: #80e0c0;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(30px, 7vw, 46px);
+      margin: 12px 0;
+    }
+
+    .sub {
+      color: #a7b1c8;
+      line-height: 1.7;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 28px 0 38px;
+    }
+
+    .card {
+      background: #121a2d;
+      border: 1px solid #28334b;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .stat-number {
+      font-size: 30px;
+      font-weight: 800;
+      margin-top: 12px;
+    }
+
+    .muted {
+      color: #a7b1c8;
+      font-size: 13px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .project {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .project h3 { margin: 0 0 8px; }
+
+    .project p {
+      margin: 0;
+      color: #a7b1c8;
+      font-size: 13px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 12px;
+      color: #80e0c0;
+      font-size: 11px;
+      background: #19382f;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+
+    button {
+      background: #80e0c0;
+      color: #0b1020;
+      font-weight: 700;
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 13px;
+      cursor: pointer;
+    }
+
+    button:focus-visible, a:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 3px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px 16px;
+      color: #7e8aa5;
+      font-size: 12px;
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 18px 16px; }
+      .brand { font-size: 21px; }
+      .project { align-items: flex-start; flex-direction: column; }
+      .project button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">Cloud<span>zen</span></div>
+    <div class="status">PERSONAL DASHBOARD</div>
+  </header>
+
+  <main>
+    <p class="eyebrow">Your workspace</p>
+    <h1>Everything, in one cloud.</h1>
+    <p class="sub">
+      Manage your projects, organize your links,
+      and prepare your next deployment.
+    </p>
+
+    <section class="stats" aria-label="Project overview">
+      <div class="card">
+        <div class="muted">Projects listed</div>
+        <div class="stat-number" id="projectCount">2</div>
+      </div>
+      <div class="card">
+        <div class="muted">Hosting connected</div>
+        <div class="stat-number">0</div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Your projects</h2>
+
+    <article class="card project">
+      <div>
+        <h3>BadalStudio</h3>
+        <p>Studio website</p>
+        <span class="tag">EXTERNAL HOSTING</span>
+      </div>
+      <button onclick="openProject('https://badalstudio.github.io/BadalStudio/')">
+        Open website ↗
+      </button>
+    </article>
+
+    <article class="card project">
+      <div>
+        <h3>Cloudzen</h3>
+        <p>Personal hosting dashboard</p>
+        <span class="tag">IN DEVELOPMENT</span>
+      </div>
+      <button onclick="alert('Next step: connect this project to a hosting provider.')">
+        View details
+      </button>
+    </article>
+  </main>
+
+  <footer>Cloudzen © 2026 · Personal project dashboard</footer>
+
+  <script>
+    function openProject(url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  </script>
+</body>
+  </html>
+  
