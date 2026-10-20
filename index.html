@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1b1d23">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Pocket Code</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+  <header id="topbar">
+    <button id="btn-menu" class="ib" aria-label="Files and settings">☰</button>
+    <div id="tabs" role="tablist"></div>
+    <button id="btn-find" class="ib" aria-label="Find and replace">🔍</button>
+    <button id="btn-run" class="ib run" aria-label="Run / preview">▶</button>
+  </header>
+
+  <div id="findbar" hidden>
+    <div class="frow">
+      <input id="find-q" type="text" placeholder="Find" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <span id="find-count">0/0</span>
+      <button id="find-prev" class="sb" aria-label="Previous match">▲</button>
+      <button id="find-next" class="sb" aria-label="Next match">▼</button>
+      <button id="find-case" class="sb" aria-label="Match case" title="Match case">Aa</button>
+      <button id="find-close" class="sb" aria-label="Close find">✕</button>
+    </div>
+    <div class="frow">
+      <input id="find-r" type="text" placeholder="Replace with" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button id="rep-one" class="sb wide">Replace</button>
+      <button id="rep-all" class="sb wide">All</button>
+    </div>
+  </div>
+
+  <main id="editor">
+    <div id="gutter" aria-hidden="true"></div>
+    <div id="code">
+      <pre id="layer-match" class="layer" aria-hidden="true"></pre>
+      <pre id="layer-hl" class="layer" aria-hidden="true"></pre>
+      <textarea id="ta" class="layer" wrap="off" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Code editor"></textarea>
+    </div>
+  </main>
+
+  <div id="keys" aria-label="Extra keys"></div>
+  <footer id="status"><span id="st-pos">Ln 1, Col 1</span><span id="st-info"></span></footer>
+</div>
+
+<div id="scrim" hidden></div>
+
+<aside id="drawer" aria-hidden="true">
+  <div class="d-head">
+    <strong>Pocket Code</strong>
+    <button id="drawer-close" class="ib" aria-label="Close menu">✕</button>
+  </div>
+  <div class="d-body">
+    <div class="d-actions">
+      <button id="act-new" class="btn">＋ New file</button>
+      <button id="act-open" class="btn">📂 Open from phone</button>
+      <button id="act-save" class="btn">💾 Save / Share file</button>
+    </div>
+
+    <h4>Files</h4>
+    <ul id="filelist"></ul>
+
+    <h4>Settings</h4>
+    <div class="setting">
+      <span>Font size</span>
+      <div class="stepper">
+        <button id="fs-minus" class="sb">−</button>
+        <b id="fs-val">14</b>
+        <button id="fs-plus" class="sb">＋</button>
+      </div>
+    </div>
+    <div class="setting">
+      <span>Tab size</span>
+      <div class="stepper">
+        <button id="tab-2" class="sb">2</button>
+        <button id="tab-4" class="sb">4</button>
+      </div>
+    </div>
+    <div class="setting">
+      <span>Theme</span>
+      <button id="theme-toggle" class="sb wide">Dark</button>
+    </div>
+    <div class="setting">
+      <span>Auto-close brackets</span>
+      <button id="autoclose-toggle" class="sb wide">On</button>
+    </div>
+    <div class="setting">
+      <span>Sample project</span>
+      <button id="reset-project" class="sb wide danger">Reset</button>
+    </div>
+    <p class="hint">Files are saved automatically on this device.</p>
+  </div>
+</aside>
+
+<section id="preview" hidden>
+  <div class="pv-bar">
+    <button id="pv-close" class="ib" aria-label="Close preview">✕</button>
+    <strong id="pv-title">Preview</strong>
+    <span class="grow"></span>
+    <button id="pv-console" class="sb">Console <b id="pv-count">0</b></button>
+    <button id="pv-reload" class="ib" aria-label="Reload">⟳</button>
+  </div>
+  <iframe id="pv-frame" title="Preview" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+  <div id="pv-log" hidden></div>
+</section>
+
+<div id="modal" hidden></div>
+<div id="toast" role="status"></div>
+<input id="file-input" type="file" multiple hidden>
+
+<script src="highlight.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
