@@ -1,0 +1,21 @@
+{
+  "name": "pocket-code-editor",
+  "version": "1.0.0",
+  "description": "A code editor app for Android (Capacitor + plain HTML/CSS/JS)",
+  "private": true,
+  "scripts": {
+    "build:www": "rm -rf www && mkdir www && cp index.html style.css highlight.js app.js sw.js manifest.webmanifest icon-192.png icon-512.png www/",
+    "android:add": "npm run build:www && npx cap add android",
+    "android:sync": "npm run build:www && npx cap sync android",
+    "android:open": "npm run android:sync && npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/filesystem": "^6.0.1",
+    "@capacitor/share": "^6.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}
