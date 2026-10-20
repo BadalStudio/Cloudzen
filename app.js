@@ -1017,6 +1017,34 @@
   $('#pv-console').onclick = function () { var l = $('#pv-log'); l.hidden = !l.hidden; };
 
   /* ================================================================
+   * Update check (looks at the newest APK published on GitHub Releases)
+   * ============================================================== */
+  var REPO = 'BadalStudio/Cloudzen';   // <-- your GitHub "owner/repository"
+  var BUILD = Number(window.APP_BUILD) || 0;
+  $('#ver-label').textContent = BUILD ? 'Version #' + BUILD : 'Version (dev)';
+
+  async function checkUpdate(silent) {
+    if (!BUILD) { if (!silent) toast('Update check works in the installed app'); return; }
+    try {
+      var r = await fetch('https://api.github.com/repos/' + REPO + '/releases/latest',
+        { headers: { Accept: 'application/vnd.github+json' } });
+      if (!r.ok) throw new Error('http ' + r.status);
+      var j = await r.json();
+      var n = parseInt(String(j.tag_name).replace(/\D/g, ''), 10) || 0;
+      var asset = (j.assets || []).filter(function (x) { return /\.apk$/i.test(x.name); })[0];
+      if (n > BUILD && asset) {
+        var ok = await ask({ title: 'Update available', text: 'Version #' + n + ' is ready (you have #' + BUILD + '). Download and install it?', ok: 'Download' });
+        if (ok) window.open(asset.browser_download_url, '_blank');
+      } else if (!silent) {
+        toast('You have the latest version');
+      }
+    } catch (e) {
+      if (!silent) toast('Could not check for updates');
+    }
+  }
+  $('#check-update').onclick = function () { checkUpdate(false); };
+
+  /* ================================================================
    * Boot
    * ============================================================== */
   window.addEventListener('keydown', function (e) {
@@ -1031,6 +1059,7 @@
 
   applySettings();
   loadActiveIntoEditor();
+  setTimeout(function () { checkUpdate(true); }, 4000);
 
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) &&
       !(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) {
