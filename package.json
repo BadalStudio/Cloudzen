@@ -4,7 +4,7 @@
   "description": "A code editor app for Android (Capacitor + plain HTML/CSS/JS)",
   "private": true,
   "scripts": {
-    "build:www": "rm -rf www && mkdir www && cp index.html style.css highlight.js app.js sw.js manifest.webmanifest icon-192.png icon-512.png www/",
+    "build:www": "rm -rf www && mkdir www && cp index.html style.css highlight.js app.js sw.js manifest.webmanifest icon-192.png icon-512.png www/ && echo \"window.APP_BUILD=0;\" > www/version.js",
     "android:add": "npm run build:www && npx cap add android",
     "android:sync": "npm run build:www && npx cap sync android",
     "android:open": "npm run android:sync && npx cap open android"
