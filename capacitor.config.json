@@ -1,0 +1,9 @@
+{
+  "appId": "com.pocketcode.editor",
+  "appName": "Pocket Code",
+  "webDir": "www",
+  "backgroundColor": "#1b1d23",
+  "android": {
+    "allowMixedContent": false
+  }
+}
