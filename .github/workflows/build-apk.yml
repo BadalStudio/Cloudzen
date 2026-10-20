@@ -26,10 +26,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Use the fixed signing key (so new APKs install as updates)
+        run: |
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
+
       - name: Prepare web files and add Android project
         run: |
           npm run build:www
+          echo "window.APP_BUILD=${{ github.run_number }};" > www/version.js
           npx cap add android
+          sed -i "s/versionCode [0-9]*/versionCode ${{ github.run_number }}/" android/app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
           npx cap sync android
 
       - name: Build debug APK
@@ -48,3 +56,4 @@ jobs:
           tag_name: apk-build-${{ github.run_number }}
           name: Pocket Code APK #${{ github.run_number }}
           files: android/app/build/outputs/apk/debug/app-debug.apk
+          
