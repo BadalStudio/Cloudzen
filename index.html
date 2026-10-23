@@ -2,126 +2,60 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#1b1d23">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>Pocket Code</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#151821">
+<meta name="description" content="Cloudzen — a phone-first code editor">
+<title>Cloudzen Code Editor</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div id="app">
-  <header id="topbar">
-    <button id="btn-menu" class="ib" aria-label="Files and settings">☰</button>
-    <div id="tabs" role="tablist"></div>
-    <button id="btn-find" class="ib" aria-label="Find and replace">🔍</button>
-    <button id="btn-run" class="ib run" aria-label="Run / preview">▶</button>
+  <header class="topbar">
+    <button id="menuBtn" class="icon-btn" aria-label="Open files and settings">☰</button>
+    <div id="tabs" class="tabs" role="tablist"></div>
+    <button id="findBtn" class="icon-btn" aria-label="Find and replace">⌕</button>
+    <button id="runBtn" class="icon-btn run" aria-label="Run preview">▶</button>
   </header>
-
-  <div id="findbar" hidden>
-    <div class="frow">
-      <input id="find-q" type="text" placeholder="Find" autocomplete="off" autocapitalize="off" spellcheck="false">
-      <span id="find-count">0/0</span>
-      <button id="find-prev" class="sb" aria-label="Previous match">▲</button>
-      <button id="find-next" class="sb" aria-label="Next match">▼</button>
-      <button id="find-case" class="sb" aria-label="Match case" title="Match case">Aa</button>
-      <button id="find-close" class="sb" aria-label="Close find">✕</button>
-    </div>
-    <div class="frow">
-      <input id="find-r" type="text" placeholder="Replace with" autocomplete="off" autocapitalize="off" spellcheck="false">
-      <button id="rep-one" class="sb wide">Replace</button>
-      <button id="rep-all" class="sb wide">All</button>
-    </div>
-  </div>
-
-  <main id="editor">
+  <section id="findPanel" class="find-panel" hidden>
+    <div class="find-row"><input id="findInput" placeholder="Find text" autocomplete="off"><span id="findCount">0/0</span><button id="findPrev">↑</button><button id="findNext">↓</button><button id="closeFind">×</button></div>
+    <div class="find-row"><input id="replaceInput" placeholder="Replace with" autocomplete="off"><button id="replaceOne">Replace</button><button id="replaceAll">All</button></div>
+  </section>
+  <main class="editor">
     <div id="gutter" aria-hidden="true"></div>
-    <div id="code">
-      <pre id="layer-match" class="layer" aria-hidden="true"></pre>
-      <pre id="layer-hl" class="layer" aria-hidden="true"></pre>
-      <textarea id="ta" class="layer" wrap="off" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Code editor"></textarea>
+    <div class="code-area">
+      <pre id="highlightLayer" aria-hidden="true"></pre>
+      <textarea id="editorInput" aria-label="Code editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"></textarea>
     </div>
   </main>
-
-  <div id="keys" aria-label="Extra keys"></div>
-  <footer id="status"><span id="st-pos">Ln 1, Col 1</span><span id="st-info"></span></footer>
+  <nav id="extraKeys" class="extra-keys" aria-label="Coding keys"></nav>
+  <footer class="status"><span id="position">Ln 1, Col 1</span><span id="language">HTML</span><span id="saveState">Saved locally</span></footer>
 </div>
 
-<div id="scrim" hidden></div>
-
-<aside id="drawer" aria-hidden="true">
-  <div class="d-head">
-    <strong>Pocket Code</strong>
-    <button id="drawer-close" class="ib" aria-label="Close menu">✕</button>
-  </div>
-  <div class="d-body">
-    <div class="d-actions">
-      <button id="act-new" class="btn">＋ New file</button>
-      <button id="act-open" class="btn">📂 Open from phone</button>
-      <button id="act-save" class="btn">💾 Save / Share file</button>
+<div id="shade" class="shade" hidden></div>
+<aside id="drawer" class="drawer" aria-hidden="true">
+  <div class="drawer-head"><strong>Cloudzen</strong><button id="closeDrawer" class="icon-btn" aria-label="Close menu">×</button></div>
+  <div class="drawer-body">
+    <div class="action-list">
+      <button id="newFile">＋ New file</button><button id="importFiles">⇧ Import from phone</button><button id="exportFile">⇩ Export current file</button><button id="starterProject">↻ Load starter project</button>
     </div>
-
-    <h4>Files</h4>
-    <ul id="filelist"></ul>
-
-    <h4>Settings</h4>
-    <div class="setting">
-      <span>Font size</span>
-      <div class="stepper">
-        <button id="fs-minus" class="sb">−</button>
-        <b id="fs-val">14</b>
-        <button id="fs-plus" class="sb">＋</button>
-      </div>
-    </div>
-    <div class="setting">
-      <span>Tab size</span>
-      <div class="stepper">
-        <button id="tab-2" class="sb">2</button>
-        <button id="tab-4" class="sb">4</button>
-      </div>
-    </div>
-    <div class="setting">
-      <span>Theme</span>
-      <button id="theme-toggle" class="sb wide">Dark</button>
-    </div>
-    <div class="setting">
-      <span>Auto-close brackets</span>
-      <button id="autoclose-toggle" class="sb wide">On</button>
-    </div>
-    <div class="setting">
-      <span>Sample project</span>
-      <button id="reset-project" class="sb wide danger">Reset</button>
-    </div>
-    <div class="setting">
-      <span id="ver-label">Version</span>
-      <button id="check-update" class="sb wide">Check update</button>
-    </div>
-    <p class="hint">Files are saved automatically on this device.</p>
+    <h3>Project files</h3><ul id="fileList"></ul>
+    <h3>Editor settings</h3>
+    <div class="setting"><span>Font size</span><div><button id="fontDown">−</button><b id="fontValue">14</b><button id="fontUp">＋</button></div></div>
+    <div class="setting"><span>Theme</span><button id="themeBtn">Dark</button></div>
+    <div class="setting"><span>Auto-close brackets</span><button id="bracketBtn">On</button></div>
+    <div class="setting"><span>Tab width</span><div><button data-tab="2" class="tab-width">2</button><button data-tab="4" class="tab-width">4</button></div></div>
+    <p class="hint">Files autosave in this browser on this device. Export important work as a backup.</p>
   </div>
 </aside>
 
-<section id="preview" hidden>
-  <div class="pv-bar">
-    <button id="pv-close" class="ib" aria-label="Close preview">✕</button>
-    <strong id="pv-title">Preview</strong>
-    <span class="grow"></span>
-    <button id="pv-console" class="sb">Console <b id="pv-count">0</b></button>
-    <button id="pv-reload" class="ib" aria-label="Reload">⟳</button>
-  </div>
-  <iframe id="pv-frame" title="Preview" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
-  <div id="pv-log" hidden></div>
+<section id="preview" class="preview" hidden>
+  <header class="preview-head"><button id="closePreview" class="icon-btn">×</button><strong>Live preview</strong><span class="spacer"></span><button id="consoleToggle">Console <b id="consoleCount">0</b></button><button id="reloadPreview" class="icon-btn">⟳</button></header>
+  <iframe id="previewFrame" title="Code preview" sandbox="allow-scripts allow-forms allow-modals"></iframe>
+  <div id="consolePanel" class="console-panel" hidden></div>
 </section>
-
-<div id="modal" hidden></div>
-<div id="toast" role="status"></div>
-<input id="file-input" type="file" multiple hidden>
-
-<script src="version.js"></script>
-<script src="highlight.js"></script>
-<script src="app.js"></script>
-</body>
-</html>
+<div id="dialogHost" hidden></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input id="filePicker" type="file" multiple hidden>
+<script src="highlight.js"></script><script src="app.js"></script>
+</body></html>
