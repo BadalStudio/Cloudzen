@@ -2,60 +2,87 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#151821">
-<meta name="description" content="Cloudzen — a phone-first code editor">
-<title>Cloudzen Code Editor</title>
-<link rel="manifest" href="manifest.webmanifest">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Codez — a phone-first code studio">
+<title>Codez — Code Studio</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="app">
   <header class="topbar">
-    <button id="menuBtn" class="icon-btn" aria-label="Open files and settings">☰</button>
+    <button id="menuBtn" class="icon-btn" aria-label="Open workspace">☰</button>
+    <div class="brand"><span class="brand-mark">◆</span><span>Codez</span><small>CODE STUDIO</small></div>
     <div id="tabs" class="tabs" role="tablist"></div>
-    <button id="findBtn" class="icon-btn" aria-label="Find and replace">⌕</button>
-    <button id="runBtn" class="icon-btn run" aria-label="Run preview">▶</button>
+    <button id="findBtn" class="icon-btn" aria-label="Find in code">⌕</button>
+    <button id="runBtn" class="run-btn">▶ <span>Run</span></button>
   </header>
   <section id="findPanel" class="find-panel" hidden>
-    <div class="find-row"><input id="findInput" placeholder="Find text" autocomplete="off"><span id="findCount">0/0</span><button id="findPrev">↑</button><button id="findNext">↓</button><button id="closeFind">×</button></div>
-    <div class="find-row"><input id="replaceInput" placeholder="Replace with" autocomplete="off"><button id="replaceOne">Replace</button><button id="replaceAll">All</button></div>
+    <div class="find-row"><input id="findInput" placeholder="Find in current file" autocomplete="off"><span id="findCount">0 matches</span><button id="findPrev">↑</button><button id="findNext">↓</button><button id="closeFind">×</button></div>
+    <div class="find-row"><input id="replaceInput" placeholder="Replace with" autocomplete="off"><button id="replaceOne">Replace</button><button id="replaceAll">Replace all</button></div>
   </section>
-  <main class="editor">
-    <div id="gutter" aria-hidden="true"></div>
-    <div class="code-area">
-      <pre id="highlightLayer" aria-hidden="true"></pre>
-      <textarea id="editorInput" aria-label="Code editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"></textarea>
-    </div>
+  <main id="workspace" class="workspace">
+    <aside class="activitybar"><button class="active" id="filesTool" title="Files">▦</button><button id="searchTool" title="Search">⌕</button><button id="settingsTool" title="Settings">⚙</button></aside>
+    <aside id="explorer" class="explorer">
+      <div class="panel-title"><span>EXPLORER</span><button id="newFolderBtn" title="New folder">＋</button><button id="newFileBtn" title="New file">▤</button></div>
+      <div class="project-label">⌄ MY PROJECT</div>
+      <div id="fileTree" class="file-tree"></div>
+      <div class="explorer-bottom"><b>WORKSPACE</b><span id="saveState">Saved locally</span><span id="profileMini">Local profile</span></div>
+    </aside>
+    <div id="splitter" class="splitter" role="separator" aria-label="Resize explorer" tabindex="0"></div>
+    <section class="editor-column">
+      <div class="editor-toolbar"><span id="activePath">index.html</span><div class="toolbar-actions"><button id="fontDown" title="Decrease code size">A−</button><button id="fontUp" title="Increase code size">A+</button><button id="desktopBtn">Desktop mode</button></div></div>
+      <main class="editor">
+        <pre id="gutter" aria-hidden="true"></pre>
+        <div class="code-area"><pre id="highlightLayer" aria-hidden="true"></pre><textarea id="editorInput" aria-label="Code editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"></textarea></div>
+      </main>
+      <nav id="extraKeys" class="extra-keys" aria-label="Coding keys"></nav>
+      <footer class="status"><span id="position">Ln 1, Col 1</span><span id="language">HTML</span><span id="statusProfile">Codez</span><span id="saveStateBottom">Saved locally</span></footer>
+    </section>
+    <div id="previewSplitter" class="splitter preview-splitter" role="separator" aria-label="Resize preview" tabindex="0" hidden></div>
+    <section id="inlinePreview" class="inline-preview" hidden>
+      <div class="preview-head"><strong>LIVE PREVIEW</strong><span class="spacer"></span><button id="openFullPreview">Full screen</button><button id="refreshPreview">⟳</button></div>
+      <iframe id="inlineFrame" title="Live project preview" sandbox="allow-scripts allow-forms allow-modals"></iframe>
+    </section>
   </main>
-  <nav id="extraKeys" class="extra-keys" aria-label="Coding keys"></nav>
-  <footer class="status"><span id="position">Ln 1, Col 1</span><span id="language">HTML</span><span id="saveState">Saved locally</span></footer>
+  <div id="bottomBar"><span>● Ready</span><span>HTML · UTF-8</span><button id="previewToggle">Split preview</button></div>
 </div>
 
 <div id="shade" class="shade" hidden></div>
 <aside id="drawer" class="drawer" aria-hidden="true">
-  <div class="drawer-head"><strong>Cloudzen</strong><button id="closeDrawer" class="icon-btn" aria-label="Close menu">×</button></div>
+  <div class="drawer-head"><strong><span class="brand-mark">◆</span> Codez workspace</strong><button id="closeDrawer" class="icon-btn">×</button></div>
   <div class="drawer-body">
-    <div class="action-list">
-      <button id="newFile">＋ New file</button><button id="importFiles">⇧ Import from phone</button><button id="exportFile">⇩ Export current file</button><button id="starterProject">↻ Load starter project</button>
+    <h3>Project files</h3>
+    <div class="action-grid">
+      <button id="drawerNewFile">＋ New file</button><button id="drawerNewFolder">▣ New folder</button>
+      <button id="importFiles">⇧ Import files</button><button id="importZip">⇧ Import ZIP</button>
+      <button id="exportFile">⇩ Export current</button><button id="exportZip">⇩ Export project ZIP</button>
     </div>
-    <h3>Project files</h3><ul id="fileList"></ul>
-    <h3>Editor settings</h3>
-    <div class="setting"><span>Font size</span><div><button id="fontDown">−</button><b id="fontValue">14</b><button id="fontUp">＋</button></div></div>
-    <div class="setting"><span>Theme</span><button id="themeBtn">Dark</button></div>
+    <h3>Workspace</h3>
+    <div class="setting"><span>Preview position</span><button id="previewLayoutBtn">Right</button></div>
+    <div class="setting"><span>Desktop mode</span><button id="desktopSettingBtn">Off</button></div>
+    <div class="setting"><span>Syntax palette</span><button id="paletteBtn">Violet</button></div>
+    <div class="setting"><span>Theme</span><button id="themeBtn">Midnight</button></div>
+    <div class="setting"><span>Profile username</span><button id="profileBtn">Set username</button></div>
+    <p id="profileLabel" class="hint">Local profile only. Real email sign-in needs a secure backend.</p>
+    <h3>Editor</h3>
+    <div class="setting"><span>Font size</span><div><button id="fontDown2">−</button><b id="fontValue">14</b><button id="fontUp2">＋</button></div></div>
     <div class="setting"><span>Auto-close brackets</span><button id="bracketBtn">On</button></div>
     <div class="setting"><span>Tab width</span><div><button data-tab="2" class="tab-width">2</button><button data-tab="4" class="tab-width">4</button></div></div>
-    <p class="hint">Files autosave in this browser on this device. Export important work as a backup.</p>
+    <p class="hint">Files autosave on this device in this browser. Export backups regularly. ZIP tools need internet to load JSZip.</p>
   </div>
 </aside>
-
 <section id="preview" class="preview" hidden>
-  <header class="preview-head"><button id="closePreview" class="icon-btn">×</button><strong>Live preview</strong><span class="spacer"></span><button id="consoleToggle">Console <b id="consoleCount">0</b></button><button id="reloadPreview" class="icon-btn">⟳</button></header>
-  <iframe id="previewFrame" title="Code preview" sandbox="allow-scripts allow-forms allow-modals"></iframe>
+  <header class="preview-head"><button id="closePreview" class="icon-btn">×</button><strong>Full preview</strong><span class="spacer"></span><button id="consoleToggle">Console <b id="consoleCount">0</b></button><button id="reloadPreview" class="icon-btn">⟳</button></header>
+  <iframe id="previewFrame" title="Full project preview" sandbox="allow-scripts allow-forms allow-modals"></iframe>
   <div id="consolePanel" class="console-panel" hidden></div>
 </section>
 <div id="dialogHost" hidden></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <input id="filePicker" type="file" multiple hidden>
-<script src="highlight.js"></script><script src="app.js"></script>
-</body></html>
+<input id="zipPicker" type="file" accept=".zip,application/zip" hidden>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="highlight.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
